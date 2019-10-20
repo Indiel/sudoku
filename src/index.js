@@ -1,70 +1,73 @@
-// module.exports = function solveSudoku(matrix) {
-function solveSudoku(matrix) {
+module.exports = function solveSudoku(matrix) {
+// function solveSudoku(matrix) {
 
-    // function verify(matrix) {
-    //     let intermediate = [];
+    function verify(matrix) {
+        let intermediate = [];
 
-    //     let flagSquare = true;
-    //     let flagLine = true;
+        let flagSquare = true;
+        let flagLine = true;
     
-    //     for (let i = 3; i <= matrix.length; i += 3) {
-    //         for (let j = 3; j <= matrix.length; j += 3) {
+        for (let i = 3; i <= matrix.length; i += 3) {
+            for (let j = 3; j <= matrix.length; j += 3) {
                 
-    //             for (let k = i - 3; k < i; k++) {
-    //                 for (let l = j - 3; l < j; l++) {
+                for (let k = i - 3; k < i; k++) {
+                    for (let l = j - 3; l < j; l++) {
     
-    //                     if (matrix[k][l] === 0) {
-    //                         for (let n = 1; n < 10; n++) {
-    //                             flagSquare = true;
+                        if (matrix[k][l] === 0) {
+                            for (let n = 1; n < 10; n++) {
+                                flagSquare = true;
     
-    //                             for (let p = i - 3; p < i; p++) {
-    //                                 for (let r = j - 3; r < j; r++) {
-    //                                     if (matrix[p][r] === n) {
-    //                                         flagSquare = false;
-    //                                         break;
-    //                                     }
-    //                                 }
-    //                             }
+                                for (let p = i - 3; p < i; p++) {
+                                    for (let r = j - 3; r < j; r++) {
+                                        if (matrix[p][r] === n) {
+                                            flagSquare = false;
+                                            break;
+                                        }
+                                    }
+                                }
     
-    //                             if (flagSquare) {
-    //                                 flagLine = true;
-    //                                 for (let z = 0; z < matrix.length; z++) {
-    //                                     if (matrix[k][z] === n || matrix[z][l] === n) {
-    //                                         flagLine = false;
-    //                                         break;
-    //                                     }
-    //                                 }
+                                if (flagSquare) {
+                                    flagLine = true;
+                                    for (let z = 0; z < matrix.length; z++) {
+                                        if (matrix[k][z] === n || matrix[z][l] === n) {
+                                            flagLine = false;
+                                            break;
+                                        }
+                                    }
     
-    //                                 if (flagLine) {
-    //                                     intermediate.push(n);
-    //                                 }
-    //                             }
+                                    if (flagLine) {
+                                        intermediate.push(n);
+                                    }
+                                }
     
-    //                             if (intermediate.length === 1) {
-    //                                 matrix[k][l] = intermediate[0];
-    //                                 intermediate = [];
-    //                             } else {
-    //                                 intermediate = [];
-    //                             }
-    //                         } 
-    //                     }
+                                if (intermediate.length === 1) {
+                                    matrix[k][l] = intermediate[0];
+                                    intermediate = [];
+                                } else {
+                                    intermediate = [];
+                                }
+                            } 
+                        }
                         
-    //                 }
-    //             }
+                    }
+                }
                 
-    //         }
-    //     }
+            }
+        }
 
-    //     for (let x = 0; x < matrix.length; x++) {
-    //         for (let y = 0; y < matrix.length; y++) {
-    //             if (matrix[x][y] === 0) {
-    //                 verify(matrix);
-    //             }
-    //         }
-    //     }
-    // }
+        for (let x = 0; x < matrix.length; x++) {
+            for (let y = 0; y < matrix.length; y++) {
+                if (matrix[x][y] === 0) {
+                    verify(matrix);
+                } else {
+                    return matrix;
+                }
+            }
+        }
+        // return matrix;
+    }
 
-    // verify(matrix);
+    return verify(matrix);
 
 
     // function countZeros(matrix) {
@@ -84,6 +87,8 @@ function solveSudoku(matrix) {
     //     }
         
     // }
+
+    
 
     let arrSquare = [
         [0, 2, 0, 2],
@@ -115,133 +120,111 @@ function solveSudoku(matrix) {
         
     }
 
-    function checkNumberInSquare(i, n) {
-        for (let p = arrSquare[i][0]; p <= arrSquare[i][1]; p++) {
-            for (let r = arrSquare[i][2]; r <= arrSquare[i][3]; r++) {
-                if (matrix[p][r] === n) {
-                    return false;
-                }
-            }
-        }
+    function checkNumberInCell(square, possibleNumbers) {
+        let possibleNumbersCell = [];
+        let flagLine = true;
 
-        return true
-    }
+        for (let row = square[0]; row <= square[1]; row++) {
+            for (let col = square[2]; col <= square[3]; col++) {
+                possibleNumbersCell = [];
 
-    function verify(matrix) {
-        let intermediate = [];
-
-        // let flagSquare = true;
-        let flagSquareZero = false;
-        // let flagLine = true;
-
-        for (let n = 1; n < 10; n++) {
-
-            for (let i = 0; i < arrSquare.length; i++) {
-                if (checkNumberInSquare(i, n)) {
-
-                    for (let p = arrSquare[i][0]; p <= arrSquare[i][1]; p++) {
-                        for (let r = arrSquare[i][2]; r <= arrSquare[i][3]; r++) {
-    
-                            if (matrix[p][r] === 0) {
-                                for (let z = 0; z < matrix.length; z++) {
-                                    if (matrix[p][z] === n || matrix[z][r] === n) {
-                                        flagSquareZero = false;
-                                        break;
-                                    } else {
-                                        flagSquareZero = true;
-                                    }
-                                }
-    
-                                if (flagSquareZero) {
-                                    intermediate.push([p, r]);
-                                }
+                if (matrix[row][col] === 0) {
+                    for (let i = 0; i < possibleNumbers.length; i++) {
+                        for (let z = 0; z < matrix.length; z++) {
+                            if (matrix[row][z] === possibleNumbers[i] || matrix[z][col] === possibleNumbers[i]) {
+                                flagLine = false;
+                                break;
+                            } else {
+                                flagLine = true;
                             }
-    
-                            
+                        }
+
+                        if (flagLine) {
+                            possibleNumbersCell.push(possibleNumbers[i]);
                         }
                     }
 
-                    if (intermediate.length === 1) {
-                        matrix[intermediate[0][0]][intermediate[0][1]] = n;
+                    if (possibleNumbersCell.length === 1) {
+                        matrix[row][col] = possibleNumbersCell[0];
+
+                        possibleNumbers.splice(possibleNumbers.indexOf(possibleNumbersCell[0]), 1);
                     }
-                    intermediate = [];
-
                 }
+                
             }
-
         }
 
-        // for (let j = 0; j < arrZero.length; j++) {
-        //     for (let i = 0; i < arrSquare.length; i++) {
-        //         if (arrZero[j][0] >= arrSquare[i][0] &&
-        //             arrZero[j][0] <= arrSquare[i][1] &&
-        //             arrZero[j][1] >= arrSquare[i][2] &&
-        //             arrZero[j][1] <= arrSquare[i][3]) {
-    
-        //             for (let n = 1; n < 10; n++) {
-        //                 flagSquare = true;
-    
-        //                 for (let p = arrSquare[i][0]; p <= arrSquare[i][1]; p++) {
-        //                     for (let r = arrSquare[i][2]; r <= arrSquare[i][3]; r++) {
-        //                         if (matrix[p][r] === n) {
-        //                             flagSquare = false;
-        //                             flagSquareZero = false;
-        //                             break;
-        //                         }
-
-        //                         if (matrix[p][r] === 0 && (p !== arrZero[j][0] || r !== arrZero[j][1])) {
-        //                             for (let z = 0; z < matrix.length; z++) {
-        //                                 if (matrix[p][z] === n || matrix[z][r] === n) {
-        //                                     flagSquareZero = false;
-        //                                     break;
-        //                                 } else {
-        //                                     flagSquareZero = true;
-        //                                 }
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-
-        //                 if (flagSquareZero) {
-        //                     matrix[arrZero[j][0]][arrZero[j][1]] = n;
-        //                     break;
-        //                 }
-    
-        //                 if (flagSquare) {
-        //                     flagLine = true;
-        //                     for (let z = 0; z < matrix.length; z++) {
-        //                         if (matrix[arrZero[j][0]][z] === n || matrix[z][arrZero[j][1]] === n) {
-        //                             flagLine = false;
-        //                             break;
-        //                         }
-        //                     }
-    
-        //                     if (flagLine) {
-        //                         intermediate.push(n);
-        //                     }
-        //                 }
-        //             }
-
-        //             if (intermediate.length === 1) {
-        //                 matrix[arrZero[j][0]][arrZero[j][1]] = intermediate[0];
-        //                 // arrZero.splice(j, 1);
-        //                 // j -= 1;
-        //                 // copyArrZero.splice(index, 1);
-        //                 intermediate = [];
-        //             } else {
-        //                 intermediate = [];
-        //             }
-        //         }
-        //     }
-        // }
-
-        countZeros(matrix);
-
-        // return matrix;
     }
 
-    // countZeros(matrix);
-    return verify(matrix);
+    function checkNumberInSquare(square) {
+        let possibleNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-    // return matrix;
+        for (let row = square[0]; row <= square[1]; row++) {
+            for (let col = square[2]; col <= square[3]; col++) {
+
+                if (matrix[row][col] !== 0) {
+                    possibleNumbers.splice(possibleNumbers.indexOf(matrix[row][col]), 1);
+                }
+
+            }
+        }
+
+        return possibleNumbers;
+    }
+
+    // function verify(matrix) {
+    //     let intermediate = [];
+
+    //     let flagSquare = true;
+
+    //     let square;
+
+    //     for (let i = 0; i < arrSquare.length; i++) {
+    //         square = arrSquare[i];
+
+    //         let possibleNumbers = checkNumberInSquare(square);
+
+    //         if (possibleNumbers.length !== 0) {
+    //             checkNumberInCell(square, possibleNumbers);
+
+    //             if (possibleNumbers.length !== 0) {
+    //                 for (let i = 0; i < possibleNumbers.length; i++) {
+
+    //                     for (let row = square[0]; row <= square[1]; row++) {
+    //                         for (let col = square[2]; col <= square[3]; col++) {
+
+    //                             if (matrix[row][col] === 0) {
+    //                                 for (let z = 0; z < matrix.length; z++) {
+    //                                     if (matrix[row][z] === possibleNumbers[i] || matrix[z][col] === possibleNumbers[i]) {
+    //                                         flagSquare = false;
+    //                                         break;
+    //                                     } else {
+    //                                         flagSquare = true;
+    //                                     }
+    //                                 }
+        
+    //                                 if (flagSquare) {
+    //                                     intermediate.push([row, col]);
+    //                                 }
+    //                             }
+                                
+    //                         }
+    //                     }
+
+    //                     if (intermediate.length === 1) {
+    //                         matrix[intermediate[0][0]][intermediate[0][1]] = possibleNumbers[i];
+    //                     }
+    //                     intermediate = [];
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     countZeros(matrix)
+
+    //     // return matrix;
+    // }
+
+    
+    // return verify(matrix);
 }
